@@ -1,3 +1,8 @@
+import { UserButton } from "@clerk/nextjs";
+import { currentUser } from "@clerk/nextjs";
+import type { User } from "@clerk/nextjs/api";
+import { auth } from "@clerk/nextjs";
+
 async function getData() {
   const res = await fetch('https://backend-3ktp.onrender.com/test')
   // The return value is *not* serialized
@@ -16,11 +21,17 @@ async function getData() {
 export default async function Home() {
   
   const data = await getData()
-
+  const user: User | null = await currentUser();
+  const { userId } = auth();
+  
   return (
     
    <>
-   {data.map(d => <p>{d}</p>)}
+   <UserButton afterSignOutUrl="/"/>
+   {data.map((d: string) => <p>{d}</p>)}
+   
+   {userId ? <p>{userId}</p> : <p>user not signed in</p>}
+   
    
 
    </>
