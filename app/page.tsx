@@ -4,7 +4,7 @@ import type { User } from "@clerk/nextjs/api";
 import { auth } from "@clerk/nextjs";
 
 async function getData() {
-  const res = await fetch('https://backend-3ktp.onrender.com/test')
+  const res = await fetch('https://backend-3ktp.onrender.com/test', { cache: 'no-store' })
   // The return value is *not* serialized
   // You can return Date, Map, Set, etc.
  
