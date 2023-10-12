@@ -1,65 +1,93 @@
-import { NextRequest } from 'next/server'
-import { NextResponse } from 'next/server'
-
-import { Svix } from "svix";
+import type { User } from "@clerk/nextjs/api";
 import { Webhook } from "svix";
+import { headers } from "next/headers";
 
-import { WebhookEvent } from "@clerk/nextjs/server";
+type UnwantedKeys =
+  | "emailAddresses"
+  | "firstName"
+  | "lastName"
+  | "primaryEmailAddressId"
+  | "primaryPhoneNumberId"
+  | "phoneNumbers";
+interface UserInterface extends Omit<User, UnwantedKeys> {
+  email_addresses: {
+    email_address: string;
+    id: string;
+  }[];
+  primary_email_address_id: string;
+  first_name: string;
+  last_name: string;
+  primary_phone_number_id: string;
+  phone_numbers: {
+    phone_number: string;
+    id: string;
+  }[];
+}
 
-
-// export async function POST(request: Request, response: Response){
-//     // const res = await fetch('https://backend-3ktp.onrender.com/test')
-//     // const resData = await res.json()
-//     // return Response.json(resData)
-
-//     // if(request.method !== 'POST') return new Response('method not allowed', {
-//     //     status: 405
-//     // })
-
-//     const payload = request.body
-//     const headers = request.headers
-//     const clerkSecret = process.env.SIGNINGSECRET || ''
-//     const heads = {
-//         'svix-id': headers.get('svix-id') || '', 
-//         'svix-timestamp': headers.get('svix-timestamp') || '', 
-//         "svix-signature": headers.get("svix-signature") || '',
-//     }
-
-//     const wh = new Webhook(clerkSecret)
-//     let evt: any
-
-//     try{
-//         evt = wh.verify(JSON.stringify(payload), heads)
-//     }catch(error){
-//         return new NextResponse('failed', {
-//             status: response.status
-//         })
-//     }
-
-//     if(evt.type === "user.created" || evt.type === "user.updated") {
-//     //     // // const updateResult = await User.updateOne(
-//     //     //   { id: evt.data.id },
-//     //     //   evt.data,
-//     //     //   { upsert: true }
-//     //     // );
-//         console.log("Update result:" /*, updateResult*/);
-//       } else if (evt.type === "user.deleted") {
-//     //     // const { id } = evt.data;
-//     //     // const deleteResult = await User.deleteOne({ id: evt.data.id });
-//         console.log("Delete result:" /*, deleteResult*/);
-//       }
-
-//       return new NextResponse('success', {
-//         status: response.status
-//     })
-// }
+const webhookSecret: string = process.env.SIGNINGSECRET || "";
+let i: string;
 
 export async function POST(request: Request) {
-    const payload: WebhookEvent = await request.json();
-    console.log(payload.data);
-    return Response.json({ message: "Received" });
+  const payLoad = await request.json();
+  const payLoadString = JSON.stringify(payLoad);
+  const headerPayload = headers();
+  const svixId = headerPayload.get("svix-id");
+  const svixIdTimeStamp = headerPayload.get("svix-timestamp");
+  const svixSignature = headerPayload.get("svix-signature");
+
+  if (!svixId || !svixIdTimeStamp || !svixSignature) {
+    console.log("svixId", svixId);
+    console.log("svixIdTimeStamp", svixIdTimeStamp);
+    console.log("svixSignature", svixSignature);
+    return new Response("Error occured", {
+      status: 400,
+    });
   }
 
-export async function GET() {
-    return Response.json({ message: "Hello World!" });
+  const svixHeaders = {
+    "svix-id": svixId,
+    "svix-timestamp": svixIdTimeStamp,
+    "svix-signature": svixSignature,
+  };
+
+  const wh = new Webhook(webhookSecret);
+  let evt: Event | null = null;
+  try {
+    evt = wh.verify(payLoadString, svixHeaders) as Event;
+  } catch (error) {
+    console.log("error");
+    return new Response("Error occured", {
+      status: 400,
+    });
   }
+  const { id } = evt.data;
+  const eventType: EventType = evt.type;
+  if (eventType === "user.created" || eventType === "user.updated") {
+    const user = {
+      name: `${payLoad.data["first_name"]} ${payLoad.data["last_name"]}`,
+      username: payLoad.data["username"],
+      clerkID: payLoad.data["id"],
+    };
+
+    console.log(user);
+  } else if (eventType === "user.deleted") {
+    const deletedUserClerkID = payLoad.data.id;
+    console.log(deletedUserClerkID);
+  }
+
+  return new Response("", {
+    status: 201,
+  });
+}
+
+type Event = {
+  data: UserInterface;
+  object: "event";
+  type: EventType;
+};
+
+type EventType = "user.created" | "user.updated" | "user.deleted" | "*";
+
+// export async function GET() {
+//   return Response.json({ message: i });
+// }
