@@ -3,9 +3,7 @@ import { UserButton } from "@clerk/nextjs";
 import { currentUser } from "@clerk/nextjs";
 import type { User } from "@clerk/nextjs/api";
 import { auth } from "@clerk/nextjs";
-// import {Button} from '@nextui-org/button'
 import React from "react";
-// import {Button} from "@nextui-org/react";
 import {Avatar, AvatarGroup, AvatarIcon} from "@nextui-org/react";
 import { Button } from '@nextui-org/button'
 import { Card, CardBody } from '@nextui-org/card'
@@ -41,22 +39,7 @@ export default async function Home() {
    
    {userId ? <p>{userId}</p> : <p>user not signed in</p>}
    
-   {/* <div className="flex gap-3 items-center">
-      <Avatar src="https://i.pravatar.cc/150?u=a042581f4e29026024d" />
-      <Avatar name="Junior" />
-      <Avatar src="https://i.pravatar.cc/150?u=a042581f4e29026704d" />
-      <Avatar name="Jane" />
-      <Avatar src="https://i.pravatar.cc/150?u=a04258114e29026702d" />
-      <Avatar name="Joe" />
-    </div> */}
 
-    {/* <Button color="primary">
-      Button
-    </Button>
-
-    <Button color="primary" isLoading>
-      Loading
-    </Button> */}
 
 <section className='py-36'>
       <div className='container flex items-center justify-center'>
