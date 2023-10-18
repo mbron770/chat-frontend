@@ -1,53 +1,32 @@
-'use client'
+"use client";
 import SendMessage from "../components/chat/SendMessage";
-import RecievedMessages from "../components/chat/RecievedMessages"
-import { currentUser } from "@clerk/nextjs";
-import type { User } from "@clerk/nextjs/api";
-import { auth } from "@clerk/nextjs";
-import { useEffect, useState } from 'react';
-import io from 'socket.io-client'
+import RecievedMessages from "../components/chat/RecievedMessages";
+import { useEffect, useState } from "react";
+import { io } from "socket.io-client";
+import { useUser } from "@clerk/nextjs";
 
+export default function Messaging() {
+  const { user } = useUser();
+  console.log(user?.id);
+  const clerkUser = user?.id;
+  const [socket, setSocket] = useState<any | null>(null);
+  console.log(clerkUser);
+  console.log(socket.io["uri"]);
 
-const socket = io('http://127.0.0.1:10000')
+  useEffect(() => {
+    const newSocket = io("http://127.0.0.1:10000");
+    setSocket(newSocket);
+  }, [clerkUser]);
 
+  const sendMessage = (message: { clerkUser: any; text: string }) => {
+    socket.emit("send_message", JSON.stringify(message));
+    console.log(message);
+  };
 
-// async function sendMessage() {
-//     // const res = await fetch('http://127.0.0.1:10000', { cache: 'no-store' })
-//     const message = {
-//         user: user, 
-//         text: text,
-//     }
-//     socket.emit('send_message', message)
-//     setText('')
-// }
-
-
-
-export default function Messaging(){
-    const clerkUser: User | null = currentUser()
-    const { userId } = auth()
-    const [text, setText] = useState<string>('')
-    const [user, setUser] = useState(userId)
-    
-
-    const sendMessage = () => {
-        const message = {
-            user: user, 
-            text: text,
-        }
-        socket.emit('send_message', message)
-        setText('')
-    }
-    
-    
-
-
-
-    return(
-        <>
-        
-        <SendMessage setText={setText}/>
-        <RecievedMessages/>
-       </>
-    )
+  return (
+    <>
+      <SendMessage sendMessage={sendMessage} clerkUser={clerkUser} />
+      <RecievedMessages />
+    </>
+  );
 }
