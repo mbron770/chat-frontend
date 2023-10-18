@@ -11,7 +11,7 @@ export default function Messaging() {
   const clerkUser = user?.id;
   const [socket, setSocket] = useState<any | null>(null);
   console.log(clerkUser);
-  console.log(socket.io["uri"]);
+  console.log(socket?.io["uri"]);
 
   useEffect(() => {
     const newSocket = io("http://127.0.0.1:10000");
