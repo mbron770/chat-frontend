@@ -1,9 +1,11 @@
 "use client";
 import SendMessage from "../components/chat/SendMessage";
 import RecievedMessages from "../components/chat/RecievedMessages";
+import SearchRecipient from "../components/shared/SearchRecipient"
 import { useEffect, useState } from "react";
 import { io } from "socket.io-client";
 import { useUser } from "@clerk/nextjs";
+
 
 export default function Messaging() {
   const { user } = useUser();
@@ -23,10 +25,14 @@ export default function Messaging() {
     console.log(message);
   };
 
+
+
+
   return (
     <>
+    <SearchRecipient/>
       <SendMessage sendMessage={sendMessage} clerkUser={clerkUser} />
-      <RecievedMessages />
+      <RecievedMessages/>
     </>
   );
 }

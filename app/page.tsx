@@ -10,24 +10,23 @@ import { Card, CardBody } from '@nextui-org/card'
 import shoe from '@/public/images/shoe.webp'
 import Image from 'next/image'
 
-async function getData() {
-  const res = await fetch('https://backend-3ktp.onrender.com/test', { cache: 'no-store' })
-  // The return value is *not* serialized
-  // You can return Date, Map, Set, etc.
+// async function getData() {
+//   const res = await fetch('http://127.0.0.1:10000/display_all_users', { cache: 'no-store' })
  
-  if (!res.ok) {
-  //   // This will activate the closest `error.js` Error Boundary
-    throw new Error('Failed to fetch data')
-  }
+//   if (!res.ok) {
+//   //   // This will activate the closest `error.js` Error Boundary
+//     throw new Error('Failed to fetch data')
+//   }
  
-  return res.json()
+//   return res.json()
   
-} 
+// } 
 
 
 export default async function Home() {
   
-  const data = await getData()
+  // const data = await getData()
+  // console.log(data)
   const user: User | null = await currentUser();
   const { userId } = auth();
   
@@ -35,7 +34,7 @@ export default async function Home() {
     
    <>
    <UserButton afterSignOutUrl="/"/>
-   {data.map((d: string) => <p>{d}</p>)}
+   {/* {data.map((d: string) => <p>{d}</p>)} */}
    
    {userId ? <p>{userId}</p> : <p>user not signed in</p>}
    
