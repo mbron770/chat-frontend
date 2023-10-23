@@ -1,4 +1,4 @@
-// 'use client'
+'use client'
 import { UserButton } from "@clerk/nextjs";
 import { currentUser } from "@clerk/nextjs";
 import type { User } from "@clerk/nextjs/api";
@@ -9,6 +9,11 @@ import { Button } from '@nextui-org/button'
 import { Card, CardBody } from '@nextui-org/card'
 import shoe from '@/public/images/shoe.webp'
 import Image from 'next/image'
+
+import type { RootState } from './redux/store';
+import { useSelector, useDispatch } from 'react-redux';
+import { increment, decrement, incrementByAmount } from './redux/features/counter/counterSlice';
+
 
 // async function getData() {
 //   const res = await fetch('http://127.0.0.1:10000/display_all_users', { cache: 'no-store' })
@@ -23,20 +28,36 @@ import Image from 'next/image'
 // } 
 
 
-export default async function Home() {
+export default function Home() {
   
   // const data = await getData()
   // console.log(data)
-  const user: User | null = await currentUser();
-  const { userId } = auth();
+  // const user: User | null = await currentUser();
+  // const { userId } = auth();
+
+  const count = useSelector((state: RootState) => state.counter.value);
+  const dispatch = useDispatch();
   
   return (
     
    <>
+    <button 
+        // className={styles.button}
+        onClick={() => dispatch(increment())}
+      >Increment</button>
+      <span>{count}</span>
+      <button 
+        // className={styles.button}
+        onClick={() => dispatch(decrement())}
+      >Decrement</button>
+      <button 
+        // className={styles.button}
+        onClick={() => dispatch(incrementByAmount(2))}
+      >Increment by 2</button>
    <UserButton afterSignOutUrl="/"/>
    {/* {data.map((d: string) => <p>{d}</p>)} */}
    
-   {userId ? <p>{userId}</p> : <p>user not signed in</p>}
+   {/* {userId ? <p>{userId}</p> : <p>user not signed in</p>} */}
    
 
 

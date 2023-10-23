@@ -4,6 +4,8 @@ import { ClerkProvider } from "@clerk/nextjs";
 import { Inter } from "next/font/google";
 import * as React from "react";
 import { Providers } from "./providers";
+import { ReduxProviders } from "./redux/provider"
+
 import ThemeSwitcher from './components/shared/themeSwitcher'
 import Link from 'next/link'
 
@@ -24,6 +26,7 @@ export default function RootLayout({
       <html lang="en" className='dark'>
         <body className={inter.className}>
           {/* {children} */}
+          <ReduxProviders>
           <Providers>
 
           <header className='py-6'>
@@ -36,10 +39,8 @@ export default function RootLayout({
               <ThemeSwitcher />
             </nav>
           </header>
-            
-            
-            
             {children}</Providers>
+            </ReduxProviders>
         </body>
       </html>
     </ClerkProvider>
