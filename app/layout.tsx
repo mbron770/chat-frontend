@@ -22,6 +22,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
+    
     <ClerkProvider>
       <html lang="en" className='dark'>
         <body className={inter.className}>
@@ -30,13 +31,16 @@ export default function RootLayout({
           <Providers>
 
           <header className='py-6'>
+          
             <nav className='container flex items-center justify-between'>
+            
               <ul>
                 <li>
                   <Link href='/'>Home</Link>
+                  <ThemeSwitcher />
                 </li>
               </ul>
-              <ThemeSwitcher />
+             
             </nav>
           </header>
             {children}</Providers>

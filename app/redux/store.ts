@@ -2,10 +2,12 @@
 import { configureStore } from '@reduxjs/toolkit'
 
 import counterReducer from './features/counter/counterSlice'
+import selectedRecipientReducer from './selectedRecipientSlice'
 
 export const store = configureStore({
   reducer: {
-    counter: counterReducer 
+    counter: counterReducer, 
+    selectedRecipient: selectedRecipientReducer,
   }
 })
 
