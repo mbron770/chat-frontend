@@ -20,7 +20,7 @@ export default function Messaging() {
     setSocket(newSocket);
   }, [clerkUser]);
 
-  const sendMessage = (message: { clerkUser: any; text: string }) => {
+  const sendMessage = (message: { sender: any; content: string; dateTime: Date; recipient: string;}) => {
     socket.emit("send_message", JSON.stringify(message));
     console.log(message);
   };

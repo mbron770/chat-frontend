@@ -67,6 +67,8 @@ export async function POST(request: Request) {
       name: `${payLoad.data["first_name"]} ${payLoad.data["last_name"]}`,
       username: payLoad.data["username"],
       clerkID: payLoad.data["id"],
+      messages_received: [],
+      messages_sent: [],
     };
     console.log("user added");
     console.log(user);
@@ -76,6 +78,8 @@ export async function POST(request: Request) {
       name: `${payLoad.data["first_name"]} ${payLoad.data["last_name"]}`,
       username: payLoad.data["username"],
       clerkID: payLoad.data["id"],
+      messages_received: [],
+      messages_sent: [],
     };
     console.log(user);
     console.log("user updated");
@@ -101,7 +105,8 @@ type Event = {
 type EventType = "user.created" | "user.updated" | "user.deleted" | "*";
 
 async function addUser(user: any) {
-  const url = `https://backend-3ktp.onrender.com/add_user`;
+  // const url = `https://backend-3ktp.onrender.com/add_user`;
+  const url = 'https://calm-wombats-pay.loca.lt/add_user'
 
   try {
     const userResponse = await fetch(url, {
@@ -128,7 +133,9 @@ async function addUser(user: any) {
 }
 
 async function editUser(user: any, id: string) {
-  const url = `https://backend-3ktp.onrender.com/update_user/${id}`;
+  // const url = `https://backend-3ktp.onrender.com/update_user/${id}`;
+  const url = `https://calm-wombats-pay.loca.lt/update_user/${id}`;
+  
 
   try {
     const userResponse = await fetch(url, {
@@ -157,7 +164,9 @@ async function editUser(user: any, id: string) {
 async function deleteUser(id: string) {
   try {
     const deleteUser = await fetch(
-      `https://backend-3ktp.onrender.com/delete_user/${id}`,
+      // `https://backend-3ktp.onrender.com/delete_user/${id}`,
+      `https://hip-walls-greet.loca.lt/${id}`,
+
       {
         method: "DELETE",
       }

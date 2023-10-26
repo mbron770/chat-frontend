@@ -8,7 +8,12 @@ import type { RootState, AppDispatch } from "../../redux/store";
 import { useSelector, useDispatch } from "react-redux";
 import { setRecipient } from "../../redux/selectedRecipientSlice";
 interface SendMessageProps {
-  sendMessage: (message: { clerkUser: any; text: string, dateTime: Date, sendTo: string}) => void;
+  sendMessage: (message: {
+    sender: any;
+    content: string;
+    dateTime: Date;
+    recipient: string;
+  }) => void;
   clerkUser: any;
 }
 
@@ -19,18 +24,34 @@ export default function SendMessage({
   const [text, setText] = useState<string>("");
   console.log(text);
 
-  const recipient = useSelector((state: RootState) => state.selectedRecipient.value);
+  const recipient = useSelector(
+    (state: RootState) => state.selectedRecipient.value
+  );
+
+  function sendMessageToDB(message: any) {
+    // fetch("https://backend-3ktp.onrender.com/display_all_users", { cache: 'no-store' })
+    fetch("https://backend-3ktp.onrender.com/add_message_to_db", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        cache: 'no-store',
+      },
+      body: JSON.stringify(message),
+    }).then((res) => {
+      if (res.ok) return res.json();
+    });
+  }
 
   const handleSend = () => {
     const message = {
-      clerkUser: clerkUser,
-      text: text,
+      sender: clerkUser,
+      content: text,
       dateTime: new Date(),
-      sendTo: recipient
+      recipient: recipient,
     };
     setText("");
     sendMessage(message);
-    
+    sendMessageToDB(message)
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
