@@ -25,8 +25,8 @@ export default function SearchRecipient() {
   // const recipient = useSelector((state: RootState) => state.selectedRecipient.value);
 
   useEffect(() => {
-    // fetch("https://backend-3ktp.onrender.com/display_all_users")
-      fetch("http://127.0.0.1:10000/display_all_users", { cache: 'no-store' } )
+      fetch("https://backend-3ktp.onrender.com/display_all_users", { cache: 'no-store' })
+      // fetch("http://127.0.0.1:10000/display_all_users", { cache: 'no-store' } )
       .then((res) => res.json())
       .then((data) => setAllUsers(data))
       .catch((error) => console.error(error.message));

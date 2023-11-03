@@ -6,7 +6,6 @@ import { useEffect, useState } from "react";
 import { io } from "socket.io-client";
 import { useUser } from "@clerk/nextjs";
 
-
 export default function Messaging() {
   const { user } = useUser();
   console.log(user?.id);
@@ -16,7 +15,8 @@ export default function Messaging() {
   console.log(socket?.io["uri"]);
 
   useEffect(() => {
-    const newSocket = io("http://127.0.0.1:10000");
+    // const newSocket = io("http://127.0.0.1:10000");
+    const newSocket = io("https://backend-3ktp.onrender.com")
     setSocket(newSocket);
   }, [clerkUser]);
 

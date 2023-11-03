@@ -2,7 +2,7 @@ import { authMiddleware } from "@clerk/nextjs";
 
 export default authMiddleware({
     // publicRoutes: ['/', '/dashboard' /*, '/clerk'*/], 
-    // ignoredRoutes: ['/clerk'],
+    ignoredRoutes: ['/clerk'],
     publicRoutes: ["/", '/clerk'],
 
 });

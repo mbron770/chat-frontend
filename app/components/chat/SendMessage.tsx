@@ -29,7 +29,7 @@ export default function SendMessage({
   );
 
   function sendMessageToDB(message: any) {
-    // fetch("https://backend-3ktp.onrender.com/display_all_users", { cache: 'no-store' })
+    fetch("https://backend-3ktp.onrender.com/display_all_users", { cache: 'no-store' })
     fetch("https://backend-3ktp.onrender.com/add_message_to_db", {
       method: "POST",
       headers: {
